@@ -9,7 +9,7 @@ import logging
 
 class Sp1Spider(scrapy.Spider):
 	name = 'sp1'
-    allowed_domains = ['https://www.reddit.com/']
+        allowed_domains = ['https://www.reddit.com/']
 	start_urls = ['https://www.reddit.com/r/The_Donald/comments/5aupnh/breaking_i_believe_i_have_connected_a_convicted/']
 	# start_urls = ['https://www.reddit.com/r/The_Donald/comments/5aupnh/breaking_i_believe_i_have_connected_a_convicted/',
 	# 'http://truepundit.com/breaking-bombshell-nypd-blows-whistle-on-new-hillary-emails-money-laundering-sex-crimes-with-children-child-exploitation-pay-to-play-perjury/', 
