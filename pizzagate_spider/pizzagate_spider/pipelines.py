@@ -34,7 +34,7 @@ class PizzagateSpiderPipeline(object):
 		VALUES(?, ?, ?, ?, ?)", \
 		(item.get('author', ''), item.get('url', ''), item.get('title', ''), item.get('datetime', ''), item.get('domain', '') ))
 		
-		print 'Article Added in Database'
+		print('Article Added in Database')
 		self.con.commit()
 		
 	def storeInDB_instance(self, item):
@@ -43,5 +43,5 @@ class PizzagateSpiderPipeline(object):
 		VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", \
 		(item.get('url', ''), item.get('text_body', ''), item.get('text_body_html', ''), item.get('links_contained', ''), item.get('datetime', ''),  item.get('author', ''), item.get('id', ''), item.get('type', ''), item.get('likes', ''), item.get('reply_to', '')))
 		
-		print 'Instance Added in Database'
+		print('Instance Added in Database')
 		self.con.commit()
