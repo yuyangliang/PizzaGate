@@ -26,6 +26,8 @@ class PizzagateSpiderPipeline(object):
 			self.storeInDB_article(item)
 		if item.__class__.__name__ == 'InstanceItem':
 			self.storeInDB_instance(item)
+		if item.__class__.__name__ == 'LinkItem':
+			self.storeInDB_link(item)
 		return item
 		
 	def storeInDB_article(self, item):
@@ -39,9 +41,18 @@ class PizzagateSpiderPipeline(object):
 		
 	def storeInDB_instance(self, item):
 		self.cur.execute(\
-		"INSERT INTO instance(url, text_body, text_body_html, links_contained, datetime, author, id, type, likes, reply_to) \
-		VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", \
-		(item.get('url', ''), item.get('text_body', ''), item.get('text_body_html', ''), item.get('links_contained', ''), item.get('datetime', ''),  item.get('author', ''), item.get('id', ''), item.get('type', ''), item.get('likes', ''), item.get('reply_to', '')))
+		"INSERT INTO instance(url, text_body, text_body_html, links_contained, datetime, author, id, type, likes, reply_to, relevance) \
+		VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", \
+		(item.get('url', ''), item.get('text_body', ''), item.get('text_body_html', ''), item.get('links_contained', ''), item.get('datetime', ''),  item.get('author', ''), item.get('id', ''), item.get('type', ''), item.get('likes', ''), item.get('reply_to', ''), item.get('relevance', '')))
 		
 		print('Instance Added in Database')
 		self.con.commit()
+		
+	def storeInDB_link(self, item):
+		self.cur.execute(\
+		"INSERT INTO link(url, response, parsable) \
+		VALUES(?, ?, ?)", \
+		(item.get('url', ''), item.get('response', ''), item.get('parsable', '') ))
+		
+		print('Link Added in Database')
+		self.con.commit()		

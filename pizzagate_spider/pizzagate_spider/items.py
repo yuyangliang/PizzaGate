@@ -27,3 +27,9 @@ class InstanceItem(scrapy.Item):
 	text_body = scrapy.Field()
 	text_body_html = scrapy.Field()
 	reply_to = scrapy.Field()
+	relevance = scrapy.Field()
+	
+class LinkItem(scrapy.Item):
+	url = scrapy.Field()
+	response = scrapy.Field()
+	parsable = scrapy.Field()

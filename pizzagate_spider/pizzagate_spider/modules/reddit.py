@@ -14,7 +14,7 @@ class RedditDP(DomainParser):
 		unixtime = time.mktime(datetime.datetime.strptime(date_time, "%a %b %d %X %Y %Z").timetuple())
 		title_selector = 'a[class~="title"]'
 		author_selector = 'a[class~="author"]'
-		links_selector = 'div[class~="usertext-body"] a'
+		links_selector = 'div[class="entry unvoted"] a'
 		likes = self.soup.select('div[class="score unvoted"]')[0]['title']
 		has_more = True
 		
