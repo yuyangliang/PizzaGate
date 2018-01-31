@@ -31,9 +31,9 @@ class DomainParser:
 			if not re.search(wd, self.content.lower()) == None:
 				self.content_flag = True
 				self.title = rawcontent.select(self.title_selector)[0].get_text()
-				self.author = rawcontent.select(self.author_selector)[0].get_text()
+				author = rawcontent.select(self.author_selector)[0].get_text()
+				self.author = re.sub(r'\b \(\d+\)', '', author)
 				self.links = rawcontent.select(self.links_selector)
-				logging.debug(self.links)
 				
 				break
 	
@@ -65,4 +65,11 @@ class InstanceParser:
 		'''
 		name = self.domain + '_instance'
 		self.instance_xpath, self.datetime_xpath, self.content_html_xpath, self.author_xpath, self.likes_xpath, self.links_contained_xpath, self.id_xpath, self.reply_to_xpath = getattr(self, name)()
+		
+	def get_instanceinfo_json(self):
+		'''
+		Output: Assign class attributes based on domain that contains json.
+		'''
+		name = self.domain + '_instance'
+		self.json_xpath, self.instance_selector, self.datetime_selector, self.content_selector, self.author_selector, self.likes_selector, self.id_selector, self.reply_to_selector = getattr(self, name)()
 	

@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import time
-import datetime
+from dateutil import parser
 
 from pizzagate_V1.modules.htmlparser import DomainParser, InstanceParser
 
@@ -11,7 +11,7 @@ class RedditDP(DomainParser):
 		'''
 		article_selector = 'div[id="siteTable"]'
 		date_time = self.soup.select('div[id="siteTable"] time')[0]['title']
-		unixtime = time.mktime(datetime.datetime.strptime(date_time, "%a %b %d %X %Y %Z").timetuple())
+		unixtime = time.mktime(parser.parse(date_time).timetuple())
 		title_selector = 'a[class~="title"]'
 		author_selector = 'a[class~="author"]'
 		links_selector = 'div[class="entry unvoted"] a'

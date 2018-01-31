@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 import time
-import datetime
-import logging
+from dateutil import parser
 
 from pizzagate_V1.modules.truepundit import TruepunditDP, TruepunditIP
 
@@ -12,7 +11,7 @@ class SteemitDP(TruepunditDP):
 		'''
 		article_selector = 'article'
 		date_time = self.soup.select('div[class="PostFull__header"] span[class="updated"]')[0]['title']
-		unixtime = time.mktime(datetime.datetime.strptime(date_time, "%m/%d/%Y %I:%M %p").timetuple())
+		unixtime = time.mktime(parser.parse(date_time).timetuple())
 		title_selector = 'h1[class="entry-title"]'
 		author_selector = 'a[class="ptc"]' 
 		links_selector = 'p a'

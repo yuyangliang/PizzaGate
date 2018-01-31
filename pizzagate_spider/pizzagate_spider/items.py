@@ -13,6 +13,7 @@ class ArticleItem(scrapy.Item):
 	datetime = scrapy.Field()
 	title = scrapy.Field()
 	domain = scrapy.Field()
+	unixtime = scrapy.Field()
 
 class InstanceItem(scrapy.Item):
     # define the fields for your item here like:
@@ -28,8 +29,13 @@ class InstanceItem(scrapy.Item):
 	text_body_html = scrapy.Field()
 	reply_to = scrapy.Field()
 	relevance = scrapy.Field()
+	unixtime = scrapy.Field()
 	
 class LinkItem(scrapy.Item):
 	url = scrapy.Field()
 	response = scrapy.Field()
 	parsable = scrapy.Field()
+	
+class LinkRItem(scrapy.Item):
+	link_from = scrapy.Field()
+	link_to = scrapy.Field()

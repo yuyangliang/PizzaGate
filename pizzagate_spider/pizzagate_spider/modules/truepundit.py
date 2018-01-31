@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import time
-import datetime
+from dateutil import parser
 
 from pizzagate_V1.modules.yournewswire import YournewswireDP, YournewswireIP
 
@@ -11,7 +11,7 @@ class TruepunditDP(YournewswireDP):
 		'''
 		article_selector = 'div[id^="post-"]'
 		date_time = self.soup.select('time')[0].get_text()
-		unixtime = time.mktime(datetime.datetime.strptime(date_time, "%B %d, %Y").timetuple())
+		unixtime = time.mktime(parser.parse(date_time).timetuple())
 		title_selector = 'h2[class="blog-post"]'
 		author_selector = 'span[class="author-bayside"] > a' 
 		links_selector = 'p a'

@@ -4,15 +4,19 @@ from scrapy.spiders import CrawlSpider, Rule
 import re
 from bs4 import BeautifulSoup
 from pizzagate_V1.modules.alldomain import DP, IP
-from pizzagate_V1.items import ArticleItem, InstanceItem, LinkItem
+from pizzagate_V1.items import ArticleItem, InstanceItem, LinkItem, LinkRItem
 import logging
+from src.json2xml import Json2xml
+from pizzagate_V1.modules.domain_specifications import parsable_domain_list, json2xml_list
+import time
+from dateutil import parser
 
 class Sp1Spider(scrapy.Spider):
 	name = 'sp1'
 	#allowed_domains = ['https://www.reddit.com/']
-	#start_urls = ['https://www.reddit.com/r/The_Donald/comments/5aupnh/breaking_i_believe_i_have_connected_a_convicted/']
+	#start_urls = ['https://truepundit.com/breaking-bombshell-nypd-blows-whistle-on-new-hillary-emails-money-laundering-sex-crimes-with-children-child-exploitation-pay-to-play-perjury/']
 	start_urls = ['https://www.reddit.com/r/The_Donald/comments/5aupnh/breaking_i_believe_i_have_connected_a_convicted/',
-	'http://truepundit.com/breaking-bombshell-nypd-blows-whistle-on-new-hillary-emails-money-laundering-sex-crimes-with-children-child-exploitation-pay-to-play-perjury/', 
+	'https://truepundit.com/breaking-bombshell-nypd-blows-whistle-on-new-hillary-emails-money-laundering-sex-crimes-with-children-child-exploitation-pay-to-play-perjury/', 
 	'http://yournewswire.com/fbi-clinton-email-pedophile-ring/',
 	'https://steemit.com/comet/@bitcoinnational/pizzagate-pedophila-and-cheese-pizza-warning-washington-dc-contains-murderous-perverts']
 
@@ -25,11 +29,10 @@ class Sp1Spider(scrapy.Spider):
 			yield scrapy.Request(url)
 
 	def parse(self, response):
-		list_of_domain = ['reddit', 'truepundit', 'yournewswire', 'steemit']
 		linkitem = LinkItem()
 		linkitem['url'] = response.url
 		linkitem['response'] = response.status
-		linkitem['parsable'] = any(d in response.url for d in list_of_domain)
+		linkitem['parsable'] = any(d in response.url for d in parsable_domain_list)
 			
 		yield linkitem
 		
@@ -42,15 +45,16 @@ class Sp1Spider(scrapy.Spider):
 			url_retrieved = []
 			url_validate = re.compile(r'^https?')
 			#logging.info(article.date_flag)
-			#logging.debug(article.has_more)
+			#logging.info(article.has_more)
 			
 			if article.date_flag:
 				article.inspect_article()
-				#logging.debug(article.content_flag)
+				#logging.info(article.content_flag)
 			
 			#if article.content_flag:
 				articleitem = ArticleItem()
 				instanceitem = InstanceItem()
+				linkritem = LinkRItem()
 				
 				articleitem['author'] = article.author
 				articleitem['url'] = response.url
@@ -64,6 +68,7 @@ class Sp1Spider(scrapy.Spider):
 				instanceitem['author'] = article.author
 				instanceitem['url'] = response.url
 				instanceitem['datetime'] = article.datetime
+				instanceitem['unixtime'] = article.unixtime
 				instanceitem['type'] = 'Article'
 				instanceitem['text_body'] = article.content
 				instanceitem['text_body_html'] = article.content_html
@@ -73,6 +78,9 @@ class Sp1Spider(scrapy.Spider):
 				for link in article.links:
 					if not url_validate.search(str(link['href'])) == None: 
 						instanceitem['links_contained'].append(link['href'])
+						linkritem['link_from'] = response.url
+						linkritem['link_to'] = link['href']
+						yield linkritem
 						#logging.info(str(link['href']))
 						url_retrieved.append(str(link['href']))
 						yield scrapy.Request(str(link['href']), callback = self.parse)
@@ -83,38 +91,78 @@ class Sp1Spider(scrapy.Spider):
 				
 			if article.has_more:
 				instance = IP(url = response.url)
-				instance.get_instanceinfo()
+				if instance.domain in json2xml_list:
+					instance.get_instanceinfo_json()
+					#logging.info(instance.json_xpath)
+					
+					json_data = Json2xml.fromstring(response.xpath(instance.json_xpath).extract_first()).data
+					json_object = Json2xml(json_data).json2xml()
+					
+					instance_iter = BeautifulSoup(json_object, 'lxml').select(instance.instance_selector)
+					#logging.info(len(instance_iter))
+					for i in instance_iter:
+						instanceitem['author'] = i.find(instance.author_selector).get_text()
+						instanceitem['url'] = response.url			
+						instanceitem['datetime'] = i.find_all(instance.datetime_selector)[-1].get_text()
+						instanceitem['unixtime'] = time.mktime(parser.parse(instanceitem['datetime']).timetuple())
+						instanceitem['type'] = 'Comment'
+						instanceitem['text_body_html'] = ''
+						instanceitem['text_body'] = i.find_all(instance.content_selector)[-1].get_text()
+						instanceitem['likes'] = ''
+						instanceitem['id'] = i.find_all('url')[-1].get_text()
+						instanceitem['reply_to'] = ''
+						instanceitem['links_contained'] = re.findall(r'(https?://[^\s]+)', instanceitem['text_body'])
+						instanceitem['relevance'] = article.content_flag
+						for link in instanceitem['links_contained']:
+							if not url_validate.search(str(link)) == None: 
+								linkritem['link_from'] = response.url
+								linkritem['link_to'] = str(link)
+								yield linkritem
+								url_retrieved.append(str(link))
+								yield scrapy.Request(str(link), callback = self.parse)
+						
+						instanceitem['links_contained'] = ','.join(instanceitem['links_contained'])
+						
+						if not instanceitem['text_body'] == None:
+							yield instanceitem
 				
-				instance_iter = response.xpath(instance.instance_xpath)
-				for i in instance_iter:
-					instanceitem['author'] = i.xpath(instance.author_xpath).extract_first()
-					instanceitem['url'] = response.url			
-					instanceitem['datetime'] = i.xpath(instance.datetime_xpath).extract_first()
-					instanceitem['type'] = 'Comment'
-					instanceitem['text_body_html'] = i.xpath(instance.content_html_xpath).extract_first()
-					instanceitem['likes'] = i.xpath(instance.likes_xpath).extract_first()
-					instanceitem['id'] = i.xpath(instance.id_xpath).extract_first()
-					instanceitem['reply_to'] = i.xpath(instance.reply_to_xpath).extract_first()
-					instanceitem['links_contained'] = i.xpath(instance.links_contained_xpath).extract()
-					instanceitem['relevance'] = article.content_flag
-					for link in instanceitem['links_contained']:
-						if not url_validate.search(str(link)) == None: 
-							url_retrieved.append(str(link))
-							yield scrapy.Request(str(link), callback = self.parse)
+				else:
+					instance.get_instanceinfo()
 					
-					instanceitem['links_contained'] = ','.join(instanceitem['links_contained'])
-					
-					if not instanceitem['text_body_html'] == None:
-						instanceitem['text_body'] = BeautifulSoup(instanceitem['text_body_html'], 'lxml').get_text().strip()
-						yield instanceitem
+					instance_iter = response.xpath(instance.instance_xpath)
+					for i in instance_iter:
+						instanceitem['author'] = i.xpath(instance.author_xpath).extract_first()
+						instanceitem['url'] = response.url			
+						instanceitem['datetime'] = i.xpath(instance.datetime_xpath).extract_first()
+						instanceitem['unixtime'] = time.mktime(parser.parse(instanceitem['datetime']).timetuple())
+						instanceitem['type'] = 'Comment'
+						instanceitem['text_body_html'] = i.xpath(instance.content_html_xpath).extract_first()
+						instanceitem['likes'] = i.xpath(instance.likes_xpath).extract_first()
+						instanceitem['id'] = i.xpath(instance.id_xpath).extract_first()
+						instanceitem['reply_to'] = i.xpath(instance.reply_to_xpath).extract_first()
+						instanceitem['links_contained'] = i.xpath(instance.links_contained_xpath).extract()
+						instanceitem['relevance'] = article.content_flag
+						for link in instanceitem['links_contained']:
+							if not url_validate.search(str(link)) == None: 
+								linkritem['link_from'] = response.url
+								linkritem['link_to'] = str(link)
+								yield linkritem
+								url_retrieved.append(str(link))
+								yield scrapy.Request(str(link), callback = self.parse)
+						
+						instanceitem['links_contained'] = ','.join(instanceitem['links_contained'])
+						
+						if not instanceitem['text_body_html'] == None:
+							instanceitem['text_body'] = BeautifulSoup(instanceitem['text_body_html'], 'lxml').get_text().strip()
+							yield instanceitem
 			
-			if not len(url_retrieved) == 0:
-				url_retrieved = list(set(url_retrieved))
+			# if not len(url_retrieved) == 0:
+				# url_retrieved = list(set(url_retrieved))
 				
-				urlfile = open('urls.txt', 'a')
-				for link in url_retrieved:
-					urlfile.write("{}\n".format(link))
-					#yield scrapy.Request(link, callback = self.parse)
+				# urlfile = open('urls.txt', 'a')
+				# for link in url_retrieved:
+					# urlfile.write("{}\n".format(link))
+					# yield scrapy.Request(link, callback = self.parse)
 		
 		except:
 			pass
