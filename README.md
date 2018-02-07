@@ -20,6 +20,8 @@ Files in the project:
 
 - modules: contains the supporting modules.
 
+	- modules/alldomain: import all the individual domain modules here.
+
 ### Domains
 
 Reddit
@@ -29,6 +31,8 @@ Yournewswire
 Truepundit
 
 Steemit
+
+thelastamericanvagabond (in progress)
 
 
 
