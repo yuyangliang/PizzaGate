@@ -20,7 +20,7 @@ Files in the project:
 
 - modules: contains the supporting modules.
 
-	- modules/alldomain: import all the individual domain modules here.
+	- modules/alldomain.py: import all the individual domain modules here.
 
 ### Domains
 
