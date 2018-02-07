@@ -1,21 +1,36 @@
 ### Webpage crawling for pizzagate
 
-This is a crawler for pizzagate related web pages. This is built upon Scrapy 1.4.
+This is a crawler for pizzagate related web pages. This is built upon Scrapy 1.5.
 
-### Sites (keep adding):
-~~YourNewsWire~~
+### How-to
 
-~~True Pundit~~
+To install Scrapy, see https://docs.scrapy.org/en/latest/intro/install.html
 
-~~steemit~~
+To set up Scrapy and get it running, see https://docs.scrapy.org/en/latest/intro/tutorial.html
 
-~~Reddit~~
+Files in the project:
 
-4chan
+- items.py: specify the items to be crawled.
 
-Daily Mail
+- pipelines.py: pipeline to the database. Sqlite used here. Change the directory accordingly in setupDBCon method ('Database/test.db' used here).
 
-YouTube
+- settings.py: spider settings. Change the project name accordingly ('pizzagate_V1' used here).
 
-Archive
+- spiders/sp1.py: the main spider.
+
+- modules: contains the supporting modules.
+
+### Domains
+
+Reddit
+
+Yournewswire
+
+Truepundit
+
+Steemit
+
+
+
+
 
