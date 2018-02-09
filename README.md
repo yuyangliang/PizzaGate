@@ -32,7 +32,7 @@ Truepundit
 
 Steemit
 
-thelastamericanvagabond (in progress)
+thelastamericanvagabond
 
 
 
