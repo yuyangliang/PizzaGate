@@ -34,18 +34,18 @@ class PizzagateSpiderPipeline(object):
 		
 	def storeInDB_article(self, item):
 		self.cur.execute(\
-		"INSERT INTO article(author, url, title, datetime, domain, unixtime) \
-		VALUES(?, ?, ?, ?, ?, ?)", \
-		(item.get('author', ''), item.get('url', ''), item.get('title', ''), item.get('datetime', ''), item.get('domain', ''), item.get('unixtime', '') ))
+		"INSERT INTO article(author, url, title, datetime, domain) \
+		VALUES(?, ?, ?, ?, ?)", \
+		(item.get('author', ''), item.get('url', ''), item.get('title', ''), item.get('datetime', ''), item.get('domain', '') ))
 		
 		print('Article Added in Database')
 		self.con.commit()
 		
 	def storeInDB_instance(self, item):
 		self.cur.execute(\
-		"INSERT INTO instance(url, text_body, text_body_html, links_contained, datetime, author, id, type, likes, reply_to, relevance, unixtime) \
-		VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", \
-		(item.get('url', ''), item.get('text_body', ''), item.get('text_body_html', ''), item.get('links_contained', ''), item.get('datetime', ''),  item.get('author', ''), item.get('id', ''), item.get('type', ''), item.get('likes', ''), item.get('reply_to', ''), item.get('relevance', ''), item.get('unixtime', '') ))
+		"INSERT INTO instance(url, text_body, text_body_html, links_contained, datetime, author, id, type, likes, reply_to, relevance, unixtime, gen_time) \
+		VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", \
+		(item.get('url', ''), item.get('text_body', ''), item.get('text_body_html', ''), item.get('links_contained', ''), item.get('datetime', ''),  item.get('author', ''), item.get('id', ''), item.get('type', ''), item.get('likes', ''), item.get('reply_to', ''), item.get('relevance', ''), item.get('unixtime', ''), item.get('gen_time', '') ))
 		
 		print('Instance Added in Database')
 		self.con.commit()
@@ -61,9 +61,9 @@ class PizzagateSpiderPipeline(object):
 		
 	def storeInDB_linkrel(self, item):
 		self.cur.execute(\
-		"INSERT INTO link_relation(link_from, link_to) \
-		VALUES(?, ?)", \
-		(item.get('link_from', ''), item.get('link_to', '') ))
+		"INSERT INTO link_relation(link_from, link_to, gen_time) \
+		VALUES(?, ?, ?)", \
+		(item.get('link_from', ''), item.get('link_to', ''), item.get('gen_time', '')))
 		
 		#print('Link Added in Database')
 		self.con.commit()				

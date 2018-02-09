@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import time
 from dateutil import parser
+import re
 
 from pizzagate_V1.modules.truepundit import TruepunditDP, TruepunditIP
 
@@ -18,8 +19,15 @@ class SteemitDP(TruepunditDP):
 		likes = self.soup.select('article span[class="Voting"] > div > a > span')[0].get_text()
 		has_more = True
 		
-		return (article_selector, date_time, unixtime, title_selector, author_selector, links_selector, likes, has_more)			
+		return (article_selector, date_time, unixtime, title_selector, author_selector, links_selector, likes, has_more)
 
+	def steemit_clean(self):
+		'''
+		Output: Clean author name.
+		'''
+		author = self.author
+		self.author = re.sub(r'\b \(\d+\)', '', author)
+		
 class SteemitIP(TruepunditIP):
 	def steemit_instance(self):
 		'''

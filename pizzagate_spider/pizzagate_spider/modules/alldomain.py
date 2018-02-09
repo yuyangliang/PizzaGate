@@ -1,7 +1,7 @@
-from pizzagate_V1.modules.steemit import SteemitDP, SteemitIP
+from pizzagate_V1.modules.thelastamericanvagabond import ThelastamericanvagabondDP, ThelastamericanvagabondIP
 
-class DP(SteemitDP):
+class DP(ThelastamericanvagabondDP):
 	pass
 	
-class IP(SteemitIP):
+class IP(ThelastamericanvagabondIP):
 	pass

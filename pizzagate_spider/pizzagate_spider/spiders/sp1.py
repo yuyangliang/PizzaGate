@@ -9,16 +9,18 @@ import logging
 from src.json2xml import Json2xml
 from pizzagate_V1.modules.domain_specifications import parsable_domain_list, json2xml_list
 import time
-from dateutil import parser
+import dateparser
+from pizzagate_V1.modules.start_urls import urls
 
 class Sp1Spider(scrapy.Spider):
 	name = 'sp1'
 	#allowed_domains = ['https://www.reddit.com/']
-	#start_urls = ['https://truepundit.com/breaking-bombshell-nypd-blows-whistle-on-new-hillary-emails-money-laundering-sex-crimes-with-children-child-exploitation-pay-to-play-perjury/']
-	start_urls = ['https://www.reddit.com/r/The_Donald/comments/5aupnh/breaking_i_believe_i_have_connected_a_convicted/',
-	'https://truepundit.com/breaking-bombshell-nypd-blows-whistle-on-new-hillary-emails-money-laundering-sex-crimes-with-children-child-exploitation-pay-to-play-perjury/', 
-	'http://yournewswire.com/fbi-clinton-email-pedophile-ring/',
-	'https://steemit.com/comet/@bitcoinnational/pizzagate-pedophila-and-cheese-pizza-warning-washington-dc-contains-murderous-perverts']
+	start_urls = urls
+	#start_urls = ['http://www.thelastamericanvagabond.com/outside-the-box/six-case-studies-massive-child-pedophilia-ring-highest-power-levels/']
+	# start_urls = ['https://www.reddit.com/r/The_Donald/comments/5aupnh/breaking_i_believe_i_have_connected_a_convicted/',
+	# 'https://truepundit.com/breaking-bombshell-nypd-blows-whistle-on-new-hillary-emails-money-laundering-sex-crimes-with-children-child-exploitation-pay-to-play-perjury/', 
+	# 'http://yournewswire.com/fbi-clinton-email-pedophile-ring/',
+	# 'https://steemit.com/comet/@bitcoinnational/pizzagate-pedophila-and-cheese-pizza-warning-washington-dc-contains-murderous-perverts']
 
 	logging.getLogger().setLevel(logging.WARNING)
 	handle_httpstatus_list = [301, 302, 400, 404, 500]
@@ -50,6 +52,7 @@ class Sp1Spider(scrapy.Spider):
 			if article.date_flag:
 				article.inspect_article()
 				#logging.info(article.content_flag)
+				article.clean_data()
 			
 			#if article.content_flag:
 				articleitem = ArticleItem()
@@ -75,13 +78,14 @@ class Sp1Spider(scrapy.Spider):
 				instanceitem['likes'] = article.likes
 				instanceitem['links_contained'] = []
 				instanceitem['relevance'] = article.content_flag
+				instanceitem['gen_time'] = time.time()
 				for link in article.links:
 					if not url_validate.search(str(link['href'])) == None: 
 						instanceitem['links_contained'].append(link['href'])
 						linkritem['link_from'] = response.url
 						linkritem['link_to'] = link['href']
+						linkritem['gen_time'] = instanceitem['gen_time']
 						yield linkritem
-						#logging.info(str(link['href']))
 						url_retrieved.append(str(link['href']))
 						yield scrapy.Request(str(link['href']), callback = self.parse)
 					
@@ -104,7 +108,7 @@ class Sp1Spider(scrapy.Spider):
 						instanceitem['author'] = i.find(instance.author_selector).get_text()
 						instanceitem['url'] = response.url			
 						instanceitem['datetime'] = i.find_all(instance.datetime_selector)[-1].get_text()
-						instanceitem['unixtime'] = time.mktime(parser.parse(instanceitem['datetime']).timetuple())
+						instanceitem['unixtime'] = time.mktime(dateparser.parse(instanceitem['datetime']).timetuple())
 						instanceitem['type'] = 'Comment'
 						instanceitem['text_body_html'] = ''
 						instanceitem['text_body'] = i.find_all(instance.content_selector)[-1].get_text()
@@ -113,10 +117,12 @@ class Sp1Spider(scrapy.Spider):
 						instanceitem['reply_to'] = ''
 						instanceitem['links_contained'] = re.findall(r'(https?://[^\s]+)', instanceitem['text_body'])
 						instanceitem['relevance'] = article.content_flag
+						instanceitem['gen_time'] = time.time()
 						for link in instanceitem['links_contained']:
 							if not url_validate.search(str(link)) == None: 
 								linkritem['link_from'] = response.url
 								linkritem['link_to'] = str(link)
+								linkritem['gen_time'] = instanceitem['gen_time']
 								yield linkritem
 								url_retrieved.append(str(link))
 								yield scrapy.Request(str(link), callback = self.parse)
@@ -134,7 +140,7 @@ class Sp1Spider(scrapy.Spider):
 						instanceitem['author'] = i.xpath(instance.author_xpath).extract_first()
 						instanceitem['url'] = response.url			
 						instanceitem['datetime'] = i.xpath(instance.datetime_xpath).extract_first()
-						instanceitem['unixtime'] = time.mktime(parser.parse(instanceitem['datetime']).timetuple())
+						instanceitem['unixtime'] = time.mktime(dateparser.parse(instanceitem['datetime']).timetuple())
 						instanceitem['type'] = 'Comment'
 						instanceitem['text_body_html'] = i.xpath(instance.content_html_xpath).extract_first()
 						instanceitem['likes'] = i.xpath(instance.likes_xpath).extract_first()
@@ -142,10 +148,12 @@ class Sp1Spider(scrapy.Spider):
 						instanceitem['reply_to'] = i.xpath(instance.reply_to_xpath).extract_first()
 						instanceitem['links_contained'] = i.xpath(instance.links_contained_xpath).extract()
 						instanceitem['relevance'] = article.content_flag
+						instanceitem['gen_time'] = time.time()
 						for link in instanceitem['links_contained']:
 							if not url_validate.search(str(link)) == None: 
 								linkritem['link_from'] = response.url
 								linkritem['link_to'] = str(link)
+								linkritem['gen_time'] = instanceitem['gen_time']
 								yield linkritem
 								url_retrieved.append(str(link))
 								yield scrapy.Request(str(link), callback = self.parse)

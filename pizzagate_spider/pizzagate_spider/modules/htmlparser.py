@@ -31,8 +31,7 @@ class DomainParser:
 			if not re.search(wd, self.content.lower()) == None:
 				self.content_flag = True
 				self.title = rawcontent.select(self.title_selector)[0].get_text()
-				author = rawcontent.select(self.author_selector)[0].get_text()
-				self.author = re.sub(r'\b \(\d+\)', '', author)
+				self.author = rawcontent.select(self.author_selector)[0].get_text()
 				self.links = rawcontent.select(self.links_selector)
 				
 				break
@@ -49,7 +48,14 @@ class DomainParser:
 		'''
 		name = self.domain + '_main'
 		self.article_selector, self.datetime, self.unixtime, self.title_selector, self.author_selector, self.links_selector, self.likes, self.has_more = getattr(self, name)()
-			
+		
+	def clean_data(self):
+		'''
+		Output: Clean data.
+		'''
+		name = self.domain + '_clean'
+		if hasattr(self, name):
+			getattr(self, name)()
 		
 class InstanceParser:
 	def __init__(self, url):
