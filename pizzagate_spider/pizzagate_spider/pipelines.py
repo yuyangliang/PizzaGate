@@ -12,7 +12,7 @@ class PizzagateSpiderPipeline(object):
 		self.setupDBCon()
 	
 	def setupDBCon(self):
-		self.con = sqlite3.connect('Database/test.db')
+		self.con = sqlite3.connect('Database/pz_data.db')
 		self.cur = self.con.cursor()
 		
 	def closeDB(self):
@@ -29,7 +29,7 @@ class PizzagateSpiderPipeline(object):
 		if item.__class__.__name__ == 'LinkItem':
 			self.storeInDB_link(item)
 		if item.__class__.__name__ == 'LinkRItem':
-			self.storeInDB_linkrel(item)			
+			self.storeInDB_linkrel(item)
 		return item
 		
 	def storeInDB_article(self, item):
