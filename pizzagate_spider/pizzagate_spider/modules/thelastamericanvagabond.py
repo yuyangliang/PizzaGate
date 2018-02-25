@@ -13,9 +13,9 @@ class ThelastamericanvagabondDP(SteemitDP):
 		article_selector = 'div[class="post_wrapper"]'
 		date_time = self.soup.select('div[class="post_detail"]')[0].get_text().split('  ')[0]
 		unixtime = time.mktime(parser.parse(date_time).timetuple())
-		title_selector = 'div[class="post_header"] h2'
-		author_selector = 'div[class="post_detail"]'
-		links_selector = 'p a'
+		title_selector = 'div[class="post_wrapper"] div[class="post_header"] h2'
+		author_selector = 'div[class="post_wrapper"] div[class="post_detail"]'
+		links_selector = 'div[class="post_wrapper"] p a'
 		likes = ''
 		has_more = True
 		

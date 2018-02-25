@@ -12,9 +12,9 @@ class YournewswireDP(RedditDP):
 		article_selector = 'article' 
 		date_time = self.soup.select('span[class="entry-meta-date updated"]')[0].get_text()
 		unixtime = time.mktime(parser.parse(date_time).timetuple())
-		title_selector = 'h1[class="entry-title"]'
-		author_selector = 'a[class="fn"]' 
-		links_selector = 'div[class="entry-content clearfix"] a'
+		title_selector = 'article h1[class="entry-title"]'
+		author_selector = 'article a[class="fn"]' 
+		links_selector = 'article div[class="entry-content clearfix"] a'
 		likes = None
 		has_more = True
 		

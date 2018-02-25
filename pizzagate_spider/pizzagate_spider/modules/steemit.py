@@ -13,9 +13,9 @@ class SteemitDP(TruepunditDP):
 		article_selector = 'article'
 		date_time = self.soup.select('div[class="PostFull__header"] span[class="updated"]')[0]['title']
 		unixtime = time.mktime(parser.parse(date_time).timetuple())
-		title_selector = 'h1[class="entry-title"]'
-		author_selector = 'a[class="ptc"]' 
-		links_selector = 'p a'
+		title_selector = 'article h1[class="entry-title"]'
+		author_selector = 'article a[class="ptc"]' 
+		links_selector = 'article p a'
 		likes = self.soup.select('article span[class="Voting"] > div > a > span')[0].get_text()
 		has_more = True
 		

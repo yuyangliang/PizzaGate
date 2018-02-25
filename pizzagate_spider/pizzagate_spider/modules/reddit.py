@@ -12,9 +12,9 @@ class RedditDP(DomainParser):
 		article_selector = 'div[id="siteTable"]'
 		date_time = self.soup.select('div[id="siteTable"] time')[0]['title']
 		unixtime = time.mktime(parser.parse(date_time).timetuple())
-		title_selector = 'a[class~="title"]'
-		author_selector = 'a[class~="author"]'
-		links_selector = 'div[class="entry unvoted"] a'
+		title_selector = 'div[id="siteTable"] a[class~="title"]'
+		author_selector = 'div[id="siteTable"] a[class~="author"]'
+		links_selector = 'div[id="siteTable"] div[class="entry unvoted"] a'
 		likes = self.soup.select('div[class="score unvoted"]')[0]['title']
 		has_more = True
 		

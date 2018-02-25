@@ -12,9 +12,9 @@ class TruepunditDP(YournewswireDP):
 		article_selector = 'div[id^="post-"]'
 		date_time = self.soup.select('time')[0].get_text()
 		unixtime = time.mktime(parser.parse(date_time).timetuple())
-		title_selector = 'h2[class="blog-post"]'
-		author_selector = 'span[class="author-bayside"] > a' 
-		links_selector = 'p a'
+		title_selector = 'div[id^="post-"] h2[class="blog-post"]'
+		author_selector = 'div[id^="post-"] span[class="author-bayside"] > a' 
+		links_selector = 'div[id^="post-"] p a'
 		likes = None
 		has_more = False
 		
