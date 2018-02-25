@@ -10,13 +10,14 @@ from urlparse import urlparse
 from collections import Counter
 from datetime import datetime
 
-conn = sqlite3.connect('test.db')
+conn = sqlite3.connect('pz_data.db')
 c = conn.cursor()
 
 c.execute('select url from link where parsable = "0" and response = "200"')
 c.execute('select min(datetime) from article')
 c.execute('select url from link')
 c.execute('select url from link where response = "200"')
+c.execute('select url from link where response = "200" and parsable = "1"')
 res = c.fetchall()
 
 #re.search(r'(\w+|\W+)(?=.(com|org))', urlparse(url).netloc).group(1).lower()

@@ -16,7 +16,7 @@ class Sp1Spider(scrapy.Spider):
 	name = 'sp1'
 	#allowed_domains = ['https://www.reddit.com/']
 	start_urls = urls
-	#start_urls = ['http://www.thelastamericanvagabond.com/outside-the-box/six-case-studies-massive-child-pedophilia-ring-highest-power-levels/']
+	#start_urls = ['http://www.dailymail.co.uk/news/article-3643373/PICTURED-sinister-holiday-villa-paedophile-MP-Clement-Freud-hosted-McCanns-weeks-Madeleine-vanished.html']
 	# start_urls = ['https://www.reddit.com/r/The_Donald/comments/5aupnh/breaking_i_believe_i_have_connected_a_convicted/',
 	# 'https://truepundit.com/breaking-bombshell-nypd-blows-whistle-on-new-hillary-emails-money-laundering-sex-crimes-with-children-child-exploitation-pay-to-play-perjury/', 
 	# 'http://yournewswire.com/fbi-clinton-email-pedophile-ring/',
@@ -51,10 +51,9 @@ class Sp1Spider(scrapy.Spider):
 			
 			if article.date_flag:
 				article.inspect_article()
-				#logging.info(article.content_flag)
 				article.clean_data()
 			
-			#if article.content_flag:
+			if article.content_flag:
 				articleitem = ArticleItem()
 				instanceitem = InstanceItem()
 				linkritem = LinkRItem()
@@ -172,5 +171,6 @@ class Sp1Spider(scrapy.Spider):
 					# urlfile.write("{}\n".format(link))
 					# yield scrapy.Request(link, callback = self.parse)
 		
-		except:
+		except Exception as e:
 			pass
+			#raise

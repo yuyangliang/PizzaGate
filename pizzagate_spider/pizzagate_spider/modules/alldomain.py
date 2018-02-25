@@ -1,7 +1,7 @@
-from pizzagate_V1.modules.thelastamericanvagabond import ThelastamericanvagabondDP, ThelastamericanvagabondIP
+from pizzagate_V1.modules.dailymail import DailymailDP, DailymailIP
 
-class DP(ThelastamericanvagabondDP):
+class DP(DailymailDP):
 	pass
 	
-class IP(ThelastamericanvagabondIP):
+class IP(DailymailIP):
 	pass

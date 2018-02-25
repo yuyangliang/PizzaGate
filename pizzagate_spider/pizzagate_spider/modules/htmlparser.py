@@ -12,8 +12,9 @@ class DomainParser:
 		Output: A BeautifulSoup object, the domain name and a list of keywords.
 		'''
 		self.soup = BeautifulSoup(html, 'lxml')
-		self.domain = re.search(r'(\w+|\W+)(?=.(com|org))', urlparse(url).netloc).group(1).lower()
-		self.kwlst = [r'\bpedo\w+\b', r'\btraffick\w+\b', r'\bsex slave\b', r'\bchild sex\b', r'\pizzagate\b', r'\bchild slave\b', r'\bpederast\b']
+		self.domain = re.search(r'(\w+|\W+)(?=.(com|org|co.uk))', urlparse(url).netloc).group(1).lower()
+		self.kwlst = [r'\bpedo\w+\b', r'\btraffick\w+\b', r'\bsex slave\b', r'\bchild sex\b', r'\bpizzagate\b', 
+		r'\bchild slave\b', r'\bpederast\b', r'\babuse\b', r'\bpaedo\b']
 	
 	def inspect_article(self):
 		'''
@@ -26,16 +27,17 @@ class DomainParser:
 		
 		self.content_html = str(rawcontent)
 		self.content = rawcontent.get_text(" ", strip = True)
+		self.title = self.soup.select(self.title_selector)[0].get_text()
+		self.author = self.soup.select(self.author_selector)[0].get_text()
+		self.links = self.soup.select(self.links_selector)
+		self.content_flag = False
 
 		for wd in self.kwlst:
 			if not re.search(wd, self.content.lower()) == None:
 				self.content_flag = True
-				self.title = rawcontent.select(self.title_selector)[0].get_text()
-				self.author = rawcontent.select(self.author_selector)[0].get_text()
-				self.links = rawcontent.select(self.links_selector)
-				
 				break
-	
+		
+
 	def inspect_date(self):
 		'''
 		Output: A True/False flag indicating if date is before December 4, 2016.
@@ -63,7 +65,7 @@ class InstanceParser:
 		Input: The url of the site.
 		Output: The domain name.
 		'''
-		self.domain = re.search(r'(\w+|\W+)(?=.(com|org))', urlparse(url).netloc).group(1).lower()
+		self.domain = re.search(r'(\w+|\W+)(?=.(com|org|co.uk))', urlparse(url).netloc).group(1).lower()
 		
 	def get_instanceinfo(self):
 		'''
