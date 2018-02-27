@@ -8,6 +8,8 @@ To install Scrapy, see https://docs.scrapy.org/en/latest/intro/install.html
 
 To set up Scrapy and get it running, see https://docs.scrapy.org/en/latest/intro/tutorial.html
 
+To run the spider, navigate to the folder and type `scrapy crawl sp1`
+
 Files in the project:
 
 - items.py: specify the items to be crawled.
