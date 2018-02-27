@@ -3,7 +3,7 @@ import time
 from dateutil import parser
 import re
 
-from pizzagate_V1.modules.nytimes import NytimesDP, NytimesIP
+from pizzagate_spider.modules.nytimes import NytimesDP, NytimesIP
 
 class LatimesDP(NytimesDP):	
 	def latimes_main(self):

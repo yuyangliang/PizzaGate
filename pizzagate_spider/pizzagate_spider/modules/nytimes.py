@@ -3,7 +3,7 @@ import time
 from dateutil import parser
 import re
 
-from pizzagate_V1.modules.thelastamericanvagabond import ThelastamericanvagabondDP, ThelastamericanvagabondIP
+from pizzagate_spider.modules.thelastamericanvagabond import ThelastamericanvagabondDP, ThelastamericanvagabondIP
 
 class NytimesDP(ThelastamericanvagabondDP):	
 	def nytimes_main(self):

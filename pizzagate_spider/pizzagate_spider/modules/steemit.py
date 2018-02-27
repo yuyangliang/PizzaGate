@@ -3,7 +3,7 @@ import time
 from dateutil import parser
 import re
 
-from pizzagate_V1.modules.truepundit import TruepunditDP, TruepunditIP
+from pizzagate_spider.modules.truepundit import TruepunditDP, TruepunditIP
 
 class SteemitDP(TruepunditDP):	
 	def steemit_main(self):

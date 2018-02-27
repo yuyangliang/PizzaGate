@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import time
 from dateutil import parser
 
-from pizzagate_V1.modules.htmlparser import DomainParser, InstanceParser
+from pizzagate_spider.modules.htmlparser import DomainParser, InstanceParser
 
 class RedditDP(DomainParser):	
 	def reddit_main(self):

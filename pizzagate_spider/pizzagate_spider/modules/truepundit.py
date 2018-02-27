@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import time
 from dateutil import parser
 
-from pizzagate_V1.modules.yournewswire import YournewswireDP, YournewswireIP
+from pizzagate_spider.modules.yournewswire import YournewswireDP, YournewswireIP
 
 class TruepunditDP(YournewswireDP):	
 	def truepundit_main(self):

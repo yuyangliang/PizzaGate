@@ -1,4 +1,4 @@
-from pizzagate_V1.modules.dailymail import DailymailDP, DailymailIP
+from pizzagate_spider.modules.dailymail import DailymailDP, DailymailIP
 
 class DP(DailymailDP):
 	pass

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for pizzagate_V1 project
+# Scrapy settings for pizzagate_spider project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,10 +9,10 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'pizzagate_V1'
+BOT_NAME = 'pizzagate_spider'
 
-SPIDER_MODULES = ['pizzagate_V1.spiders']
-NEWSPIDER_MODULE = 'pizzagate_V1.spiders'
+SPIDER_MODULES = ['pizzagate_spider.spiders']
+NEWSPIDER_MODULE = 'pizzagate_spider.spiders'
 DOWNLOAD_TIMEOUT = 15
 
 LOG_LEVEL = 'INFO'
@@ -54,15 +54,15 @@ RETRY_ENABLED = False
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 SPIDER_MIDDLEWARES = {
-    'pizzagate_V1.middlewares.FilterResponses': 543,
+    'pizzagate_spider.middlewares.FilterResponses': 543,
 }
 
-DUPEFILTER_CLASS = 'pizzagate_V1.dupe_filter.CustomFilter'
+DUPEFILTER_CLASS = 'pizzagate_spider.dupe_filter.CustomFilter'
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'pizzagate_V1.middlewares.PizzagateV1DownloaderMiddleware': 543,
+#    'pizzagate_spider.middlewares.PizzagateV1DownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -74,7 +74,7 @@ DUPEFILTER_CLASS = 'pizzagate_V1.dupe_filter.CustomFilter'
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'pizzagate_V1.pipelines.PizzagateSpiderPipeline': 300,
+    'pizzagate_spider.pipelines.PizzagateSpiderPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -99,3 +99,6 @@ ITEM_PIPELINES = {
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 AJAXCRAWL_ENABLED = True
+
+#PIZZAGATE SPECIFIC SETTINGS
+DB_NAME = "test.db"

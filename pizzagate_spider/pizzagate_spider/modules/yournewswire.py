@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import time
 from dateutil import parser
 
-from pizzagate_V1.modules.reddit import RedditDP, RedditIP
+from pizzagate_spider.modules.reddit import RedditDP, RedditIP
 
 class YournewswireDP(RedditDP):	
 	def yournewswire_main(self):

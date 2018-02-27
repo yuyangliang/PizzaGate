@@ -3,7 +3,7 @@ import time
 from dateutil import parser
 import re
 
-from pizzagate_V1.modules.steemit import SteemitDP, SteemitIP
+from pizzagate_spider.modules.steemit import SteemitDP, SteemitIP
 
 class ThelastamericanvagabondDP(SteemitDP):	
 	def thelastamericanvagabond_main(self):
