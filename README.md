@@ -1,3 +1,4 @@
+
 ### Webpage crawling for pizzagate
 
 This is a crawler for pizzagate related web pages. This is built upon Scrapy 1.5.
@@ -7,6 +8,8 @@ This is a crawler for pizzagate related web pages. This is built upon Scrapy 1.5
 To install Scrapy, see https://docs.scrapy.org/en/latest/intro/install.html
 
 To set up Scrapy and get it running, see https://docs.scrapy.org/en/latest/intro/tutorial.html
+
+To run the spider, navigate to the folder and type scrapy crawl sp1
 
 Files in the project:
 
