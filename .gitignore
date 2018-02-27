@@ -47,3 +47,15 @@ Temporary Items
 .apdisk
 .idea/
 Pizzagate.iml
+/pizzagate_spider/json2xml-2.2.0/
+pizzagate_spider/json2xml-2.2.0/
+pizzagate_spider/pizzagate_spider/__pycache__/
+pizzagate_spider/pizzagate_spider/modules/__pycache__/dailymail.cpython-36.pyc
+pizzagate_spider/pizzagate_spider/modules/__pycache__/domain_specifications.cpython-36.pyc
+pizzagate_spider/pizzagate_spider/modules/__pycache__/dupe_filter.cpython-36.pyc
+pizzagate_spider/pizzagate_spider/modules/__pycache__/latimes.cpython-36.pyc
+pizzagate_spider/pizzagate_spider/modules/__pycache__/nytimes.cpython-36.pyc
+pizzagate_spider/pizzagate_spider/modules/__pycache__/start_urls.cpython-36.pyc
+pizzagate_spider/pizzagate_spider/modules/__pycache__/thelastamericanvagabond.cpython-36.pyc
+pizzagate_spider/src/
+pizzagate_spider/test.db
